@@ -4,7 +4,7 @@ const profileRoutes = require('./routes/profile-routes');
 const passportSetup = require('./config/passport-setup');
 const connectDB = require('./config/db');
 const keys = require('./config/keys');
-const cookieSession = require('cookie-session');
+const session = require('express-session');
 const passport = require('passport');
 
 const app = express();
@@ -14,9 +14,13 @@ connectDB();
 // set up view engine
 app.set('view engine', 'ejs');
 
-app.use(cookieSession({
-  maxAge: 24 * 60 * 60 * 1000,
-  keys: [keys.session.cookieKey]
+app.use(session({
+  secret: keys.session.cookieKey,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000
+  }
 }));
 
 // initialize passport
